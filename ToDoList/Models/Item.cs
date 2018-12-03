@@ -2,48 +2,63 @@ using System.Collections.Generic;
 
 namespace ToDoList.Models
 {
-  public class Item
-  {
-    private string _description;
-    private int _id;
-    private static List<Item> _instances = new List<Item> {};
-
-    public Item (string description)
+    public class Item
     {
-      _description = description;
-      _instances.Add(this);
-      _id = _instances.Count;
-    }
+        private string _description;
+        private int _id;
 
-    public string GetDescription()
-    {
-      return _description;
-    }
+        public Item(string description)
+        {
+            _description = description;
+            _id = _instances.Count;
+        }
 
-    public void SetDescription(string newDescription)
-    {
-      _description = newDescription;
-    }
+        public string GetDescription()
+        {
+            return _description;
+        }
 
-    public int GetId()
-    {
-      return _id;
-    }
+        public void SetDescription(string newDescription)
+        {
+            _description = newDescription;
+        }
 
-    public static List<Item> GetAll()
-    {
-      return _instances;
-    }
+        // public int GetId()
+        // {
+        //     return _id;
+        // }
 
-    public static void ClearAll()
-    {
-      _instances.Clear();
-    }
+        public static List<Item> GetAll()
+        {
+            List<Item> allItems = new List<Item> { };
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM items;";
+            MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+            while (rdr.Read())
+            {
+                int itemId = rdr.GetInt32(0);
+                string itemDescription = rdr.GetString(1);
+                Item newItem = new Item(itemDescription, itemId); allItems.Add(newItem);
+            }
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return allItems;
+        }
 
-    public static Item Find(int searchId)
-    {
-      return _instances[searchId-1];
-    }
+        // public static void ClearAll()
+        // {
+        //     _instances.Clear();
+        // }
 
-  }
+        // public static Item Find(int searchId)
+        // {
+        //     return _instances[searchId - 1];
+        // }
+
+    }
 }
