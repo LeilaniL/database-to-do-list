@@ -27,9 +27,14 @@ namespace ToDoList.Models
       return _id;
     }
 
+    public void AddItem(Item item)
+    {
+      _items.Add(item);
+    }
+
     public static void ClearAll()
     {
-        _instances.Clear();
+      _instances.Clear();
     }
 
     public static List<Category> GetAll()
@@ -44,12 +49,8 @@ namespace ToDoList.Models
 
     public List<Item> GetItems()
     {
-        return _items;
+      return _items;
     }
 
-    public void AddItem(Item item)
-    {
-        _items.Add(item);
-    }
   }
 }

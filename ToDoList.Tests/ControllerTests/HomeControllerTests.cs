@@ -9,31 +9,31 @@ namespace ToDoList.Tests
     [TestClass]
     public class HomeControllerTest
     {
-        [TestMethod]
-    public void Create_ReturnsCorrectActionType_RedirectToActionResult()
-    {
+
+      [TestMethod]
+      public void Index_ReturnsCorrectView_True()
+      {
         //Arrange
-        ItemsController controller = new ItemsController();
+        HomeController controller = new HomeController();
 
         //Act
-        IActionResult view = controller.Create("Walk the dog");
+        ActionResult indexView = controller.Index();
 
         //Assert
-        Assert.IsInstanceOfType(view, typeof(RedirectToActionResult));
-    }
+        Assert.IsInstanceOfType(indexView, typeof(ViewResult));
+      }
 
-    [TestMethod]
-    public void Create_RedirectsToCorrectAction_Index()
-    {
+      [TestMethod]
+      public void Index_HasCorrectModelType_ItemList()
+      {
         //Arrange
-        ItemsController controller = new ItemsController();
-        RedirectToActionResult actionResult = controller.Create("Walk the dog") as RedirectToActionResult;
+        ViewResult indexView = new HomeController().Index() as ViewResult;
 
         //Act
-        string result = actionResult.ActionName;
+        var result = indexView.ViewData.Model;
 
         //Assert
-        Assert.AreEqual(result, "Index");
+        Assert.IsInstanceOfType(result, typeof(List<Item>));
+      }
     }
     }
-}
