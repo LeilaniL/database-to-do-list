@@ -163,6 +163,23 @@ namespace ToDoList.Models
         {
             return _categoryId;
         }
+        public void Delete(int id)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM items WHERE id = @thisId;";
+            MySqlParameter inputId = new MySqlParameter();
+            inputId.ParameterName = "@thisId";
+            inputId.Value = id;
+            cmd.Parameters.Add(inputId);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
 
     }
 }
