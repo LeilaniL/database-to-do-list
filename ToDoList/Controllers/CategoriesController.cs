@@ -37,26 +37,30 @@ namespace ToDoList.Controllers
     {
       Dictionary<string, object> model = new Dictionary<string, object>();
       Category selectedCategory = Category.Find(id);
+      Console.WriteLine(selectedCategory.GetId());
       List<Item> categoryItems = selectedCategory.GetItems();
+      Console.WriteLine(categoryItems.Count);
+      Console.WriteLine("Show controller works");
       model.Add("category", selectedCategory);
       model.Add("items", categoryItems);
+      Console.WriteLine(categoryItems);
       return View(model);
     }
     
     // This one creates new Items within a given Category, not new Categories:
-    [HttpPost("/categories/{categoryId}/items")]
-    public ActionResult Create(int categoryId, string itemDescription)
-    {
-      Dictionary<string, object> model = new Dictionary<string, object>();
-      Category foundCategory = Category.Find(categoryId);
-      Item newItem = new Item(itemDescription);
-      newItem.Save();
-      foundCategory.AddItem(newItem);
-      List<Item> categoryItems = foundCategory.GetItems();
-      model.Add("items", categoryItems);
-      model.Add("category", foundCategory);
-      return View("Show", model);
-    }
+[HttpPost("/categories/{categoryId}/items")]
+        public ActionResult Create(int categoryId, string itemDescription, DateTime itemDueDate)
+        {
+            Dictionary<string, object> model = new Dictionary<string, object>();
+            Category foundCategory = Category.Find(categoryId);
+            Item newItem = new Item(itemDescription, categoryId, itemDueDate);
+            foundCategory.AddItem(newItem);
+            newItem.Save();
+            List<Item> categoryItems = foundCategory.GetItems();
+            model.Add("items", categoryItems);
+            model.Add("category", foundCategory);
+            return View("Show", model);
+        }
 
   }
 }

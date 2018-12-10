@@ -91,10 +91,11 @@ namespace ToDoList.Models
 
     public List<Item> GetItems()
     {
+      Console.WriteLine("I tried to get items");
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT item_id FROM categories_items WHERE category_id = @CategoryId;";
+      cmd.CommandText = @"SELECT items FROM categories_items WHERE category_id = @CategoryId;";
       MySqlParameter categoryIdParameter = new MySqlParameter();
       categoryIdParameter.ParameterName = "@CategoryId";
       categoryIdParameter.Value = _id;
@@ -110,6 +111,8 @@ namespace ToDoList.Models
       List<Item> items = new List<Item> {};
       foreach (int itemId in itemIds)
       {
+              Console.WriteLine("GetItems was called and empty item list started");
+
         var itemQuery = conn.CreateCommand() as MySqlCommand;
         itemQuery.CommandText = @"SELECT * FROM items WHERE id = @ItemId;";
         MySqlParameter itemIdParameter = new MySqlParameter();
@@ -121,7 +124,8 @@ namespace ToDoList.Models
         {
           int thisItemId = itemQueryRdr.GetInt32(0);
           string itemDescription = itemQueryRdr.GetString(1);
-          Item foundItem = new Item(itemDescription, thisItemId);
+          DateTime itemDueDate = rdr.GetDateTime(3);
+          Item foundItem = new Item(itemDescription, thisItemId, itemDueDate);
           items.Add(foundItem);
         }
         itemQueryRdr.Dispose();
@@ -131,6 +135,7 @@ namespace ToDoList.Models
       {
         conn.Dispose();
       }
+      Console.WriteLine(items.Count);
       return items;
     }
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Models;
 using System.Collections.Generic;
+using System;
 
 namespace ToDoList.Controllers
 {
@@ -44,7 +45,7 @@ namespace ToDoList.Controllers
     }
     
     [HttpPost("/categories/{categoryId}/items/{itemId}")]
-    public ActionResult Update(int categoryId, int itemId, string newDescription)
+    public ActionResult Update(int categoryId, int itemId, string newDescription, DateTime itemDueDate )
     {
       Item item = Item.Find(itemId);
       item.Edit(newDescription);
