@@ -104,7 +104,7 @@ namespace ToDoList.Models
             List<int> itemIds = new List<int> { };
             while (rdr.Read())
             {
-                int itemId = rdr.GetInt32(2);
+                int itemId = rdr.GetInt32(0);
                 itemIds.Add(itemId);
             }
             rdr.Dispose();
